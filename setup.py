@@ -11,7 +11,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5'
+    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6'
 ]
 
@@ -27,7 +27,7 @@ setup(name='python-rabbitmq-logging',
       keywords='logging rabbitmq logs',
       license='MIT',
 
-      author='Serdar Aydoğan',
+      author='Serdar AYDOGAN',
       author_email="aydoganserdar@gmail.com",
 
       classifiers=CLASSIFIERS,
