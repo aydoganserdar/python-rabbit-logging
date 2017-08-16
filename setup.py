@@ -12,22 +12,23 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5'
+    'Programming Language :: Python :: 3.6'
 ]
 
 INSTALL_REQUIRES = [
     'pika==0.10.0'
 ]
 
-setup(name='python-logging-rabbitmq',
+setup(name='python-rabbitmq-logging',
       version='1.0.7',
 
-      url='https://github.com/albertomr86/python-logging-rabbitmq',
-      description='Send logs to RabbitMQ from Python/Django',
+      url='https://github.com/aydoganserdar/python-rabbit-logging',
+      description='Send logs to RabbitMQ from Python/Flask',
       keywords='logging rabbitmq logs',
       license='MIT',
 
-      author='Alberto Menendez Romero',
-      author_email="albertomr86@gmail.com",
+      author='Serdar Aydoğan',
+      author_email="aydoganserdar@gmail.com",
 
       classifiers=CLASSIFIERS,
       install_requires=INSTALL_REQUIRES,
