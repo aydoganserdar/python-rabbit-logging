@@ -4,19 +4,19 @@ Logging handler to ships logs to RabbitMQ. Compatible with Flask.
 ## Installation
 Install using pip.
 ```sh
-pip install python_logging_rabbitmq
+pip install python_rabbit_logging
 ```
 
 ## Handlers
 This package has two built-in handlers that you can import as follows:
 ```python
-from python_logging_rabbitmq import RabbitMQHandler
+from python_rabbit_logging import RabbitMQHandler
 ```
 
 or (thanks to [@wallezhang](https://github.com/wallezhang))
 
 ```python
-from python_logging_rabbitmq import RabbitMQHandlerOneWay
+from python_rabbit_logging import RabbitMQHandlerOneWay
 ```
 
 | Handler               | Description                                                                                                                                                                                                                                                                                  |
@@ -28,7 +28,7 @@ from python_logging_rabbitmq import RabbitMQHandlerOneWay
 To use with python first create a logger for your app, then create an instance of the handler and add it to the logger created.
 ```python
 import logging
-from python_logging_rabbitmq import RabbitMQHandler
+from python_rabbit_logging import RabbitMQHandler
 
 logger = logging.getLogger('myapp')
 logger.setLevel(logging.DEBUG)
@@ -68,7 +68,7 @@ As result, a similar message as follows will be sent to RabbitMQ:
 By default, logs will be sent to RabbitMQ using the exchange **'log'**, this should be of **type topic**. The **routing key** used is formed by concatenating the *logger name* and the *log level*. For example:
 ```python
 import logging
-from python_logging_rabbitmq import RabbitMQHandler
+from python_rabbit_logging import RabbitMQHandler
 
 logger = logging.getLogger('myapp')
 logger.setLevel(logging.DEBUG)
@@ -140,7 +140,7 @@ By default, python_logging_rabbitmq implements a custom JSONFormatter; but if yo
 
 ```python
 import logging
-from python_logging_rabbitmq import RabbitMQHandler
+from python_rabbit_logging import RabbitMQHandler
 
 FORMAT = '%(asctime)-15s %(message)s'
 formatter = logging.Formatter(fmt=FORMAT)
