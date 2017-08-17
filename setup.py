@@ -20,7 +20,7 @@ INSTALL_REQUIRES = [
 ]
 
 setup(name='python-rabbitmq-logging',
-      version='0.0.2',
+      version='0.0.3',
 
       url='https://github.com/aydoganserdar/python-rabbit-logging',
       description='Send logs to RabbitMQ from Python/Flask',
