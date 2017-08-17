@@ -47,6 +47,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
         self.connection = None
         self.channel = None
         self.exchange_declared = not declare_exchange
+        self.level_queue = {}
+        self.level_queue_binds = {}
         self.routing_key_format = routing_key_format
         self.close_after_emit = close_after_emit
 
@@ -98,7 +100,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 self.channel = self.connection.channel()
 
             if self.exchange_declared is False:
-                self.channel.exchange_declare(exchange=self.exchange, type='topic', durable=True, auto_delete=False)
+                self.channel.exchange_declare(exchange=self.exchange, type='direct', durable=True, auto_delete=False)
                 self.exchange_declared = True
 
             # Manually remove logger to avoid shutdown message.
@@ -117,6 +119,39 @@ class RabbitMQHandlerOneWay(logging.Handler):
 
         self.connection, self.channel = None, None
 
+    def queue_declare(self, queue_name):
+        try:
+            if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
+                self.open_connection()
+
+            level_queue = self.channel.queue_declare(
+                            queue=queue_name,
+                            passive=False,
+                            durable=True,
+                            exclusive=False,
+                            auto_delete=False
+                        )
+            self.level_queue[queue_name] = level_queue.method.queue
+        except Exception:
+            if queue_name in self.level_queue:
+                del self.level_queue[queue_name]
+
+    def queue_bind(self, queue_name, routing_key):
+
+        try:
+            if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
+                self.open_connection()
+
+            self.channel.queue_bind(
+                exchange=self.exchange,
+                queue=queue_name,
+                routing_key=routing_key
+            )
+            self.level_queue_binds[routing_key] = True
+        except Exception:
+            if routing_key in self.level_queue_binds:
+                del self.level_queue_binds[routing_key]
+
     def start_message_worker(self):
         worker = threading.Thread(target=self.message_worker)
         worker.setDaemon(True)
@@ -129,6 +164,12 @@ class RabbitMQHandlerOneWay(logging.Handler):
 
                 if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                     self.open_connection()
+
+                if record.levelname not in self.level_queue:
+                    self.queue_declare(record.levelname)
+
+                if routing_key not in self.level_queue_binds:
+                    self.queue_bind(record.levelname, routing_key)
 
                 self.channel.basic_publish(
                     exchange=self.exchange,
